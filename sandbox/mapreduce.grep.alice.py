@@ -9,43 +9,21 @@ def mapper(s): # string -> [(key value)]
 	no_space = ' '
 	pairs = []
         s = s.replace('\xe2\x80\x94', no_space); s = s.replace('\'', no_space);
-        s = re.sub('[.:?!;\t]', single_space, s);
+        s = re.sub('[:;\t]', single_space, s);
         s = s.lower();
-        s = s.split(' ')
-	for c in s:
-		c = c.strip()
-		if(c == '' or c == '"'):
-			continue
-		pairs.append((c,1))
-	return pairs
-
-def combiner(pairs):
-	index = {}
-	for (key,value) in pairs:
-		if not index.has_key(key):
-			index[key] = value
-		else:
-			index[key] = index[key] + value
-	pairs = []
-	for key in index:
-		pairs.append((key,index[key]))
+	if s.find('alice') > -1:
+		pairs.append((1,s))
 	return pairs
 
 def reducer(data):
-	index = {}
-	for pairs in data:
-		for (key,value) in pairs:
-			if not index.has_key(key):
-				index[key] = value
-			else:
-				index[key] = index[key] + value
 	pairs = []
-	for key in index:
-		pairs.append((key,index[key]))
+        for element in data:
+#		print element
+		for (key,value) in element:
+			if value :
+				pairs.append((key,value))
 	return pairs
 
-data = p.map(mapper,x)
-data = p.map(combiner,data)
-sorted_list = reducer(data)
-sorted_list.sort(key=lambda word: word[1], reverse=True)
-print sorted_list
+data = map(mapper,x)
+data= reducer(data)
+print data
