@@ -1,8 +1,13 @@
+# An example of filtering/grepping a file by line.
 import multiprocessing.dummy
 import re
 p = multiprocessing.dummy.Pool(6)
 file_handler = open("alice.txt")
 x = file_handler.read().split('\n')
+
+def print_array(array):
+	for item in array:
+		print item
 
 def mapper(s): # string -> [(key value)]
 	single_space = ' '
@@ -18,7 +23,6 @@ def mapper(s): # string -> [(key value)]
 def reducer(data):
 	pairs = []
         for element in data:
-#		print element
 		for (key,value) in element:
 			if value :
 				pairs.append((key,value))
@@ -26,4 +30,4 @@ def reducer(data):
 
 data = map(mapper,x)
 data= reducer(data)
-print data
+print_array(data)
